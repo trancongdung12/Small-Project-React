@@ -1,0 +1,87 @@
+#table-x{
+    margin-top: 100px;
+}
+#prd-container .card{
+    margin-top: 20px;
+    width: 15rem;
+    margin-left: 20px;
+}
+#prd-container .card img{
+    width: 14rem;
+    height:200px;
+    margin-top: 10px;
+}
+#prd-container{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 100px;
+    margin-left: 235px;
+
+}
+.table-responsive .qty-cart{
+    display: flex;
+}
+.table-responsive .qty-cart button{
+    border-radius: 0%;
+    width: 35px;
+    height: 35px;
+    margin-top: 2px;
+}
+.table-responsive .qty-cart input{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+#bill-container{
+    margin-top: 100px;
+    border: 1px solid #ddd;
+    padding: 20px 30px;
+}
+#bill-container .col-3{
+    border: 2px solid brown;
+}
+.Arrange{
+    margin-top: 50px;
+    margin-left: 15%;
+}
+.Arrange button{
+    margin-left: 20px;
+}
+#detail .row{
+    margin-top: 100px;
+}
+.btn-icon{
+    background: none;
+    border: none;
+    outline: none;
+}
+.iconCirleLeft{
+    position: absolute;
+    left: 15%;
+    top: 55%;
+    font-size: 30px;
+
+}
+.iconCirleRight{
+    position: absolute;
+    right:15%;
+    top: 55%;
+    font-size: 30px;
+
+}
+.navbar-nav .cart-item{
+ margin-left: 400px;
+ margin-right: 100px;
+}
+.icon-cart{
+    font-size: 25px;
+}
+.count-cart{
+    position: absolute;
+    top: 8px;
+    right: 152px;
+    padding: 3px 8px;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    border-radius: 100%;
+}
