@@ -1,5 +1,6 @@
 import React,{ Component } from "react";
 import {Link} from "react-router-dom";
+import CurrencyFormat from 'react-currency-format';
 
 class Cart extends Component{
     constructor(){
@@ -15,14 +16,6 @@ class Cart extends Component{
         }
     }
     
-    getTotal(){
-        var total = 0;
-        var cartX = this.state.cart;
-        cartX.map((item)=>(
-            total += parseInt(item.price)*parseInt(item.quantity)
-          ));
-        return total;
-    }
     removeCart(key){
         return (event)=>{
             var newArr = JSON.parse(localStorage.getItem("carts"));
@@ -31,7 +24,8 @@ class Cart extends Component{
             this.setState({
               cart: newArr,
             });
-
+            
+            this.props.setCountCart();     
         }
        
       }
@@ -46,7 +40,8 @@ class Cart extends Component{
             if(oldItem.quantity == 0){
                 cart.splice(key,1);
             }
-            localStorage.setItem("carts",JSON.stringify(cart));
+            localStorage.setItem("carts",JSON.stringify(cart));          
+            this.props.setCountCart();
             this.setState({cart: cart});
         }
     }
@@ -89,7 +84,7 @@ class Cart extends Component{
                                         <button onClick={this.minusQty(item,key)} className="btn btn-danger">-</button> 
                                         <input style={{width: "100px"}} disabled  className="form-control" type="text" value={item.quantity} /> 
                                         <button onClick={this.plusQty(item)} className="btn btn-danger">+</button></td>
-                                    <td className="text-right">{item.price*item.quantity} VND</td>
+                                    <td className="text-right"><CurrencyFormat value={item.price*item.quantity} displayType={'text'} thousandSeparator={true} /> VND</td>
                                     <td className="text-right"><button onClick={this.removeCart(key)} className="btn btn-sm btn-danger">Remove</button> </td>
                                     <td></td>
                                 </tr>   
@@ -101,7 +96,7 @@ class Cart extends Component{
                             <td></td>
                             <td></td>
                             <td><strong>Total</strong></td>
-                    <td className="text-right"><strong>{this.getTotal()}VND</strong></td>
+                    <td className="text-right"><strong><CurrencyFormat value={this.props.getTotal()} displayType={'text'} thousandSeparator={true} /> VND</strong></td>
                         </tr>
                     </tbody>
                 </table>

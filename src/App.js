@@ -8,8 +8,8 @@ import Checkout from './components/Checkout';
 import Bill from './components/Bill';
 import NavBar from './page/NavBar';
 import Detail from './components/Detail';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronCircleRight, faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronCircleRight, faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import {
   BrowserRouter as Router,
   Switch,
@@ -28,6 +28,9 @@ class App extends Component {
     this.onRemoveProduct = this.onRemoveProduct.bind(this);
     this.onEditProduct = this.onEditProduct.bind(this);
     this.setValue = this.setValue.bind(this);
+    this.toggleNext = this.toggleNext.bind(this);
+    this.togglePrev = this.togglePrev.bind(this);
+    this.setCountCart = this.setCountCart.bind(this);
     var product = JSON.parse(localStorage.getItem("products"));
     if(!product){
       product = [];
@@ -45,10 +48,45 @@ class App extends Component {
       bill: bills,
       formValue: [],
       isEdit : false,
-      countCartItem : cart.length 
+      countCartItem : cart.length ,
+      indexStart: 0,
+      indexEnd: 4,
+      disabledNext: false,
+      disabledPrev: true
     }
   }
+  //----------PAGINATION---------//
+
+
+  togglePrev(e) {
+    var indexStart = this.state.indexStart - 4;
+    var indexEnd = this.state.indexEnd - 4;
+    var disabledPrev = false;
+
+    if (indexStart <= 0) {
+    e.preventDefault()
+    indexStart = 0;
+    indexEnd = 4;  
+    disabledPrev = true
+    }
+
+    this.setState({ indexStart: indexStart, indexEnd:indexEnd , disabledPrev: disabledPrev, disabledNext: false })
+  }
+
+  toggleNext(e) {
+    var indexStart = this.state.indexStart + 4;
+    var indexEnd = this.state.indexEnd + 4;
+    var disabledNext = false
+    if (indexEnd >= this.state.products.length) {
+      e.preventDefault()
+      disabledNext = true
+    }
+    this.setState({indexStart: indexStart, indexEnd:indexEnd, disabledNext: disabledNext, disabledPrev: false })
+  }
+
   //----------SHOPPING CART---------//
+
+
   addProductToCart(item){
     return (event)=>{
       var cart = JSON.parse(localStorage.getItem("carts"));
@@ -66,6 +104,7 @@ class App extends Component {
       localStorage.setItem("carts",JSON.stringify(cart));
     }
   }
+  
   setCountCart(){
     var cart = JSON.parse(localStorage.getItem("carts"));
     this.setState({
@@ -73,7 +112,18 @@ class App extends Component {
     })
   }
   
+  getTotal(){
+    var total = 0;
+    var cart = JSON.parse(localStorage.getItem("carts"));
+    cart.map((item)=>(
+        total += parseInt(item.price)*parseInt(item.quantity)
+      ));
+    return total;
+  }
+
   //----------DETAIL PRODUCT---------//
+
+
   showDetailProduct(item){
     return (event)=>{
       this.setState({
@@ -81,6 +131,9 @@ class App extends Component {
       })
     }
   }
+
+
+
   //----------BILL PRODUCT---------//
   createBill(event){
     event.preventDefault();
@@ -94,7 +147,7 @@ class App extends Component {
       billadress: billadress,
       billemail: billemail,
       products: localStorage.getItem("carts"),
-      billtotal:11111,
+      billtotal:this.getTotal(),
       billdate: new Date().toLocaleString()
     }
 
@@ -112,6 +165,8 @@ class App extends Component {
   }
 
   //----------SEARCH PRODUCT---------//
+
+
   searchProduct(event){
     event.preventDefault();
     var products = this.state.products;
@@ -150,6 +205,8 @@ class App extends Component {
   }
 
   //----------CRUD PRODUCT---------//
+
+
   onAddProduct(event){
     event.preventDefault();
     var name = event.target['name'].value;
@@ -217,7 +274,6 @@ class App extends Component {
       <Router>
       <div className="App">
           <NavBar countCartItem={this.state.countCartItem} searchProduct={this.searchProduct} />
-         
             <Switch>
             <Route path="/detail">
                 <Detail item={this.state.detail}  addToCart={this.addProductToCart(this.state.detail)} />
@@ -230,10 +286,10 @@ class App extends Component {
               }
               </Route>
              <Route path="/check-out">
-                <Checkout onAddBill={this.createBill} />
+                <Checkout getTotal={this.getTotal} onAddBill={this.createBill} />
               </Route>
               <Route path="/cart">
-                <Cart setCountCart={this.setCountCart} />
+                <Cart setCountCart={this.setCountCart} getTotal={this.getTotal} />
               </Route>
               <Route path="/addproduct">
                 <AddProduct
@@ -248,15 +304,16 @@ class App extends Component {
                 />
               </Route>
               <Route path="/">
-              <div className="Arrange">
-              <button onClick={this.sortByPriceAsc} className="btn btn-danger">Giá tăng dần</button>
-              <button onClick={this.sortByPriceDsc} className="btn btn-warning">Giá giảm dần</button>
-              </div>
-              <div className="container" id="prd-container">
-              <button className="btn-icon"><FontAwesomeIcon className="iconCirleLeft" icon={faChevronCircleLeft} /></button>
-              <button className="btn-icon"><FontAwesomeIcon  className="iconCirleRight" icon={faChevronCircleRight} /></button>
-                {        
-                this.state.products.map((item)=>(                 
+                  <div className="Arrange">
+                  <button onClick={this.sortByPriceAsc} className="btn btn-danger">Giá tăng dần</button>
+                  <button onClick={this.sortByPriceDsc} className="btn btn-warning">Giá giảm dần</button>
+                  </div>
+                  <div className="container" id="prd-container" >            
+                  <button className="btn-icon"  onClick={this.togglePrev}  disabled={this.state.disabledPrev}><FontAwesomeIcon className="iconCirleLeft" icon={faChevronCircleLeft} /></button>
+                  <button className="btn-icon"  onClick={this.toggleNext}  disabled={this.state.disabledNext}><FontAwesomeIcon className="iconCirleRight" icon={faChevronCircleRight} /></button>
+                {  
+                 
+                this.state.products.slice(this.state.indexStart, this.state.indexEnd).map((item)=>(                 
                   <Product item={item} showDetail={this.showDetailProduct(item)} addToCart={this.addProductToCart(item)}  />
                 ))
                 }

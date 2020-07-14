@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import CurrencyFormat from 'react-currency-format';
 class Checkout extends Component{
     constructor(){
         super();
@@ -24,7 +24,6 @@ class Checkout extends Component{
             return(
     <div class="container">
       <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"/>
         <h2>Thanh toán</h2>
       </div>
 
@@ -42,14 +41,14 @@ class Checkout extends Component{
                      <h6 class="my-0">{item.name}</h6>
               <small class="text-muted">x {item.quantity}</small>
                     </div>
-                    <span class="text-muted">{item.quantity*item.price} VND</span>
+                    <span class="text-muted"><CurrencyFormat value={item.quantity*item.price} displayType={'text'} thousandSeparator={true} /> VND</span>
                 </li>
               ))
               }
             
             <li class="list-group-item d-flex justify-content-between">
               <span>Tổng (VND)</span>
-              <strong>{this.getTotal()} VND</strong>
+              <strong><CurrencyFormat value={this.props.getTotal()} displayType={'text'} thousandSeparator={true} /> VND</strong>
             </li>
           </ul>
         </div>

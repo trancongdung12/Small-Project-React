@@ -1,5 +1,5 @@
 import React,{ Component } from "react";
-
+import CurrencyFormat from 'react-currency-format';
 
 class Detail extends Component{
     render(){
@@ -12,7 +12,7 @@ class Detail extends Component{
                 </div>
                 <div className="col-6">
                     <h4>{item.name}</h4>
-                    <p>{item.price} VND</p>
+                    <p><CurrencyFormat value={item.price} displayType={'text'} thousandSeparator={true} /> VND</p>
                     <button onClick={addToCart} className="btn btn-danger">Add to cart</button>
                 </div>
                 </div>

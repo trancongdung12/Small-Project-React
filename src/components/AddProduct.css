@@ -6,6 +6,7 @@
     width: 15rem;
     margin-left: 20px;
 }
+
 #prd-container .card img{
     width: 14rem;
     height:200px;
@@ -52,13 +53,17 @@
 .btn-icon{
     background: none;
     border: none;
-    outline: none;
+}
+.btn-icon:focus { outline: none; }
+.disable{
+    opacity: 0.8;
 }
 .iconCirleLeft{
     position: absolute;
     left: 15%;
     top: 55%;
     font-size: 30px;
+
 
 }
 .iconCirleRight{
