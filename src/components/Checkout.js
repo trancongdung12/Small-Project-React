@@ -1,27 +1,22 @@
 import React, {Component} from 'react';
+import {Redirect} from "react-router-dom";
 import CurrencyFormat from 'react-currency-format';
 class Checkout extends Component{
-    constructor(){
+      constructor(){
         super();
-        var carts = JSON.parse(localStorage.getItem("carts"));
-        if(!carts){
-            carts = [];
+        var cart = JSON.parse(localStorage.getItem('carts'));
+        if(!cart){
+          cart = []
         }
-        this.state = {
-            cart: carts,
-            total:0
+        this.state={
+          cart: cart,
         }
-    }
-    getTotal(){
-        var total = 0;
-        var cartX = this.state.cart;
-        cartX.map((item)=>(
-            total += parseInt(item.price)*parseInt(item.quantity)
-          ));
-        return total;
-    }
+      }
+    
+      
     render(){
-            return(
+        var {getTotal,onAddBill,renderRedirect} = this.props;
+    return(
     <div class="container">
       <div class="py-5 text-center">
         <h2>Thanh toán</h2>
@@ -48,17 +43,17 @@ class Checkout extends Component{
             
             <li class="list-group-item d-flex justify-content-between">
               <span>Tổng (VND)</span>
-              <strong><CurrencyFormat value={this.props.getTotal()} displayType={'text'} thousandSeparator={true} /> VND</strong>
+              <strong><CurrencyFormat value={getTotal()} displayType={'text'} thousandSeparator={true} /> VND</strong>
             </li>
           </ul>
         </div>
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Địa chỉ giao hàng</h4>
-          <form class="needs-validation" onSubmit={this.props.onAddBill} novalidate>
+          <form class="needs-validation" onSubmit={onAddBill} novalidate>
 
             <div class="mb-3">
               <label for="email"> Tên người nhận</label>
-              <input type="text" class="form-control" name="bill-name" value="Trần Công Dũng" required/>
+              <input type="text" class="form-control" name="bill-name" required/>
             </div>
 
             <div class="mb-3">
@@ -82,7 +77,8 @@ class Checkout extends Component{
               </div>
             </div>
             <hr class="mb-4"/>
-            <button class="btn btn-success btn-lg btn-block" >Thanh toán</button>
+            {renderRedirect()}
+           <button  class="btn btn-success btn-lg btn-block" > Thanh toán</button>
           </form>
         </div>
       </div>
@@ -90,4 +86,4 @@ class Checkout extends Component{
             );
         }
 }
-export default Checkout;
+export default Checkout ;

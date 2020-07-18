@@ -9,7 +9,7 @@ class Product extends Component{
         return(
         
                     <div className="card">
-                        <Link onClick={showDetail} to="/detail"><img className="card-img-top" src={item.image} alt="Card image cap"/></Link>
+                        <Link to={"/detail/"+item.id}><img className="card-img-top" src={item.image} alt="Card image cap"/></Link>
                         <div className="card-body">
                             <h5 className="card-title">{item.name}</h5>
                             

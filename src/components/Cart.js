@@ -32,9 +32,6 @@ class Cart extends Component{
     minusQty(item,key){
         return (event)=>{
             var cart = JSON.parse(localStorage.getItem("carts"));
-            if(!cart){
-                cart = [];
-            }
             var oldItem = cart.find((el)=>(el.id === item.id));
             oldItem.quantity  = oldItem.quantity-1 ;
             if(oldItem.quantity == 0){
@@ -48,9 +45,6 @@ class Cart extends Component{
     plusQty(item){
         return (event)=>{
             var cart = JSON.parse(localStorage.getItem("carts"));
-            if(!cart){
-                cart = [];
-            }
             var oldItem = cart.find((el)=>(el.id === item.id));
             oldItem.quantity  = oldItem.quantity+1 ;
             localStorage.setItem("carts",JSON.stringify(cart));
